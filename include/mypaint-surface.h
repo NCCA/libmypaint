@@ -90,8 +90,7 @@ mypaint_surface_draw_dab(MyPaintSurface *self,
                        );
 
 
-void
-mypaint_surface_get_color(MyPaintSurface *self,
+void mypaint_surface_get_color(MyPaintSurface *self,
                         float x, float y,
                         float radius,
                         float * color_r, float * color_g, float * color_b, float * color_a,

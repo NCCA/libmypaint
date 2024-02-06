@@ -50,8 +50,7 @@ typedef void (*LineChunkCallback) (uint16_t *chunk, int chunk_length, void *user
     starting top-left (0,0) and stopping at bottom-right (width-1,height-1)
     callback will be called with linear chunks of horizontal data, up to MYPAINT_TILE_SIZE long
 */
-void
-iterate_over_line_chunks(MyPaintTiledSurface * tiled_surface, int height, int width,
+void iterate_over_line_chunks(MyPaintTiledSurface * tiled_surface, int height, int width,
                          LineChunkCallback callback, void *user_data)
 {
     const int tile_size = MYPAINT_TILE_SIZE;
@@ -71,9 +70,11 @@ iterate_over_line_chunks(MyPaintTiledSurface * tiled_surface, int height, int wi
 
         // For each pixel line in the current tile row, fire callback
         const int max_y = (ty < number_of_tile_rows - 1 || height % tile_size == 0) ? tile_size : height % tile_size;
-        for (int y = 0; y < max_y; y++) {
-            for (int tx = 0; tx < tiles_per_row; tx++) {
-	      const int y_offset = y * tile_size * 4; // 4 channels
+        for (int y = 0; y < max_y; y++)
+        {
+            for (int tx = 0; tx < tiles_per_row; tx++)
+            {
+	            const int y_offset = y * tile_size * 4; // 4 channels
                 const int chunk_length = (tx < tiles_per_row - 1 || width % tile_size == 0) ? tile_size : width % tile_size;
                 callback(requests[tx].buffer + y_offset, chunk_length, user_data);
             }
@@ -93,8 +94,7 @@ typedef struct {
     FILE *fp;
 } WritePPMUserData;
 
-static void
-write_ppm_chunk(uint16_t *chunk, int chunk_length, void *user_data)
+static void write_ppm_chunk(uint16_t *chunk, int chunk_length, void *user_data)
 {
     WritePPMUserData data = *(WritePPMUserData *)user_data;
     uint8_t chunk_8bit[MYPAINT_TILE_SIZE * 4]; // 4 channels

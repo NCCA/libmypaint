@@ -57,8 +57,7 @@ struct RngDouble {
     double *ranf_arr_ptr; /* the next random fraction, or -1 */
 };
 
-void
-rng_double_get_array(RngDouble *self, double aa[], int n)
+void rng_double_get_array(RngDouble *self, double aa[], int n)
 {
   register int i,j;
   for (j=0;j<KK;j++) aa[j]=self->ran_u[j];
@@ -68,8 +67,7 @@ rng_double_get_array(RngDouble *self, double aa[], int n)
 }
 
 
-RngDouble *
-rng_double_new(long seed)
+RngDouble * rng_double_new(long seed)
 {
   RngDouble *self = (RngDouble *)malloc(sizeof(RngDouble));
 
@@ -80,14 +78,12 @@ rng_double_new(long seed)
   return self;
 }
 
-void
-rng_double_free(RngDouble *self)
+void rng_double_free(RngDouble *self)
 {
     free(self);
 }
 
-void
-rng_double_set_seed(RngDouble *self, long seed)
+void rng_double_set_seed(RngDouble *self, long seed)
 {
   register int t,s,j;
   double u[KK+KK-1];
@@ -120,8 +116,7 @@ rng_double_set_seed(RngDouble *self, long seed)
 }
 
 
-double
-rng_double_cycle(RngDouble *self)
+double rng_double_cycle(RngDouble *self)
 {
   rng_double_get_array(self, self->ranf_arr_buf, QUALITY);
   self->ranf_arr_buf[KK]=-1;
@@ -129,8 +124,7 @@ rng_double_cycle(RngDouble *self)
   return self->ranf_arr_buf[0];
 }
 
-double
-rng_double_next(RngDouble *self)
+double rng_double_next(RngDouble *self)
 {
   return ((*self->ranf_arr_ptr>=0) ? *(self->ranf_arr_ptr)++ : rng_double_cycle(self));
 }

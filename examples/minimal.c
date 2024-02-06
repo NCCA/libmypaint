@@ -13,6 +13,7 @@ stroke_to(MyPaintBrush *brush, MyPaintSurface *surf, float x, float y)
       (brush, surf, x, y, pressure, xtilt, ytilt, dtime, viewzoom, viewrotation, barrel_rotation, linear);
 }
 
+
 int
 main(int argc, char *argv[]) {
 

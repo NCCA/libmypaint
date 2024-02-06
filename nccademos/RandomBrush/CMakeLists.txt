@@ -5,12 +5,13 @@ endif()
 
 # Name of the project
 project(RandomBrushBuildAll)
-
-add_executable(RandomBrush)
 # use C++ 17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
+
+add_executable(RandomBrush)
+find_package(OpenImageIO CONFIG REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_sources(RandomBrush PRIVATE 
@@ -20,5 +21,6 @@ target_sources(RandomBrush PRIVATE
                             )
 target_link_directories(RandomBrush PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(RandomBrush PRIVATE mypaint)
+target_link_libraries(RandomBrush PRIVATE OpenImageIO::OpenImageIO OpenImageIO::OpenImageIO_Util)
 
 

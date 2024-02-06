@@ -35,20 +35,17 @@
 
 void process_tile(MyPaintTiledSurface *self, int tx, int ty);
 
-static void
-begin_atomic_default(MyPaintSurface *surface)
+static void begin_atomic_default(MyPaintSurface *surface)
 {
     mypaint_tiled_surface_begin_atomic((MyPaintTiledSurface *)surface);
 }
 
-static void
-end_atomic_default(MyPaintSurface *surface, MyPaintRectangles *roi)
+static void end_atomic_default(MyPaintSurface *surface, MyPaintRectangles *roi)
 {
     mypaint_tiled_surface_end_atomic((MyPaintTiledSurface *)surface, roi);
 }
 
-void
-prepare_bounding_boxes(MyPaintTiledSurface *self) {
+void prepare_bounding_boxes(MyPaintTiledSurface *self) {
     MyPaintSymmetryState symm_state = self->symmetry_data.state_current;
     const gboolean snowflake = symm_state.type == MYPAINT_SYMMETRY_TYPE_SNOWFLAKE;
     const int num_bboxes_desired = symm_state.num_lines * (snowflake ? 2 : 1);
@@ -91,8 +88,7 @@ prepare_bounding_boxes(MyPaintTiledSurface *self) {
  * if implementing their own #MyPaintSurface::begin_atomic vfunc.
  * Application code should only use mypaint_surface_being_atomic()
  */
-void
-mypaint_tiled_surface_begin_atomic(MyPaintTiledSurface *self)
+void mypaint_tiled_surface_begin_atomic(MyPaintTiledSurface *self)
 {
     mypaint_update_symmetry_state(&self->symmetry_data);
     prepare_bounding_boxes(self);
@@ -106,8 +102,7 @@ mypaint_tiled_surface_begin_atomic(MyPaintTiledSurface *self)
  * if implementing their own #MyPaintSurface::end_atomic vfunc.
  * Application code should only use mypaint_surface_end_atomic().
  */
-void
-mypaint_tiled_surface_end_atomic(MyPaintTiledSurface *self, MyPaintRectangles *roi)
+void mypaint_tiled_surface_end_atomic(MyPaintTiledSurface *self, MyPaintRectangles *roi)
 {
     // Process tiles
     TileIndex *tiles;
@@ -189,8 +184,7 @@ void mypaint_tiled_surface_tile_request_end(MyPaintTiledSurface *self, MyPaintTi
  * Enable/Disable symmetric brush painting across an X axis.
  *
  */
-void
-mypaint_tiled_surface_set_symmetry_state(MyPaintTiledSurface *self, gboolean active,
+void mypaint_tiled_surface_set_symmetry_state(MyPaintTiledSurface *self, gboolean active,
                                          float center_x, float center_y,
                                          float symmetry_angle,
                                          MyPaintSymmetryType symmetry_type,
@@ -206,8 +200,7 @@ mypaint_tiled_surface_set_symmetry_state(MyPaintTiledSurface *self, gboolean act
  * Initialize a request for use with mypaint_tiled_surface_tile_request_start()
  * and mypaint_tiled_surface_tile_request_end()
  */
-void
-mypaint_tile_request_init(MyPaintTileRequest *data, int level,
+void mypaint_tile_request_init(MyPaintTileRequest *data, int level,
                           int tx, int ty, gboolean readonly)
 {
     data->tx = tx;
@@ -224,8 +217,7 @@ mypaint_tile_request_init(MyPaintTileRequest *data, int level,
 }
 
 // Must be threadsafe
-static inline float
-calculate_r_sample(float x, float y, float aspect_ratio,
+static inline float calculate_r_sample(float x, float y, float aspect_ratio,
                       float sn, float cs)
 {
     const float yyr=(y*cs-x*sn)*aspect_ratio;
@@ -234,8 +226,7 @@ calculate_r_sample(float x, float y, float aspect_ratio,
     return r;
 }
 
-static inline float
-calculate_rr(int xp, int yp, float x, float y, float aspect_ratio,
+static inline float calculate_rr(int xp, int yp, float x, float y, float aspect_ratio,
                       float sn, float cs, float one_over_radius2)
 {
     // code duplication, see brush::count_dabs_to()
@@ -248,14 +239,12 @@ calculate_rr(int xp, int yp, float x, float y, float aspect_ratio,
     return rr;
 }
 
-static inline float
-sign_point_in_line( float px, float py, float vx, float vy )
+static inline float sign_point_in_line( float px, float py, float vx, float vy )
 {
     return (px - vx) * (-vy) - (vx) * (py - vy);
 }
 
-static inline void
-closest_point_to_line( float lx, float ly, float px, float py, float *ox, float *oy )
+static inline void closest_point_to_line( float lx, float ly, float px, float py, float *ox, float *oy )
 {
     const float l2 = lx*lx + ly*ly;
     const float ltp_dot = px*lx + py*ly;
@@ -274,8 +263,7 @@ closest_point_to_line( float lx, float ly, float px, float py, float *ox, float 
 //                   the nearest point
 // - delta: how much occluded is the farthest point relative
 //          to the nearest point
-static inline float
-calculate_rr_antialiased(int xp, int yp, float x, float y, float aspect_ratio,
+static inline float calculate_rr_antialiased(int xp, int yp, float x, float y, float aspect_ratio,
                       float sn, float cs, float one_over_radius2,
                       float r_aa_start)
 {
@@ -353,8 +341,7 @@ calculate_rr_antialiased(int xp, int yp, float x, float y, float aspect_ratio,
     return 1.0f - visibilityNear;
 }
 
-static inline float
-calculate_opa(float rr, float hardness,
+static inline float calculate_opa(float rr, float hardness,
               float segment1_offset, float segment1_slope,
               float segment2_offset, float segment2_slope) {
 
@@ -493,8 +480,7 @@ void render_dab_mask (uint16_t * mask,
   }
 
 // Must be threadsafe
-void
-process_op(uint16_t *rgba_p, uint16_t *mask,
+void process_op(uint16_t *rgba_p, uint16_t *mask,
            int tx, int ty, OperationDataDrawDab *op)
 {
 
@@ -562,8 +548,7 @@ process_op(uint16_t *rgba_p, uint16_t *mask,
 }
 
 // Must be threadsafe
-void
-process_tile(MyPaintTiledSurface *self, int tx, int ty)
+void process_tile(MyPaintTiledSurface *self, int tx, int ty)
 {
     TileIndex tile_index = {tx, ty};
     OperationDataDrawDab *op = operation_queue_pop(self->operation_queue, tile_index);
@@ -593,8 +578,7 @@ process_tile(MyPaintTiledSurface *self, int tx, int ty)
     mypaint_tiled_surface_tile_request_end(self, &request_data);
 }
 
-void
-update_dirty_bbox(MyPaintRectangle *bbox, OperationDataDrawDab *op)
+void update_dirty_bbox(MyPaintRectangle *bbox, OperationDataDrawDab *op)
 {
     int bb_x, bb_y, bb_w, bb_h;
     float r_fringe = op->radius + 1.0f; // +1.0 should not be required, only to be sure
@@ -963,8 +947,7 @@ mypaint_tiled_surface_init(MyPaintTiledSurface *self,
  * Does not free the #MyPaintTiledSurface itself.
  * Note: Only intended to be called from subclasses of #MyPaintTiledSurface
  */
-void
-mypaint_tiled_surface_destroy(MyPaintTiledSurface *self)
+void mypaint_tiled_surface_destroy(MyPaintTiledSurface *self)
 {
     operation_queue_free(self->operation_queue);
     if (self->bboxes != self->default_bboxes) {
