@@ -11,6 +11,8 @@
 #include <random>
 
 namespace fs = std::filesystem;
+std::random_device rd;  // Will be used to obtain a seed for the random number engine
+std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
 
 std::vector<std::string> loadbrushesfrompath(std::string_view _path)
 {
@@ -32,8 +34,18 @@ std::vector<std::string> loadbrushesfrompath(std::string_view _path)
 
 void stroke_to(MyPaintBrush *brush, MyPaintSurface *surf, float x, float y)
 {
-    float viewzoom = 1.0, viewrotation = 0.0, barrel_rotation = 0.0;
-    float pressure = 1.0, ytilt = 0.0, xtilt = 0.0, dtime = 1.0/10;
+
+    std::uniform_real_distribution<> br(0.0f, 360.0f);
+    std::uniform_real_distribution<> press(0.0f, 10.0f);
+    std::uniform_real_distribution<> tilt(-2.0f, 2.0f);
+
+    float viewzoom = 1.0;
+    float viewrotation = 0.0;
+    float barrel_rotation = br(gen);
+    float pressure = press(gen);
+    float ytilt = tilt(gen);
+    float xtilt = tilt(gen); 
+    float dtime = 1.0/10;
     gboolean linear = FALSE;
     mypaint_brush_stroke_to
       (brush, surf, x, y, pressure, xtilt, ytilt, dtime, viewzoom, viewrotation, barrel_rotation, linear);
@@ -42,11 +54,7 @@ void stroke_to(MyPaintBrush *brush, MyPaintSurface *surf, float x, float y)
 int main(int argc, char *argv[]) 
 {
 
-
-
     auto brushes=loadbrushesfrompath("../../brushes/classic");
-    std::random_device rd;  // Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
    
     MyPaintBrush *brush =    mypaint_brush_new();
     int w = 1024;
@@ -63,9 +71,11 @@ int main(int argc, char *argv[])
     MyPaintFixedTiledSurface *surface = mypaint_fixed_tiled_surface_new(w, h);
     mypaint_surface_begin_atomic((MyPaintSurface*)surface);
     int result;
-    for(int i=0; i<100; ++ i)
+    for(int i=0; i<20; ++ i)
     {
-    result = mypaint_brush_from_string(brush, brushes[rbrush(gen)].c_str());
+    int bi=rbrush(gen);
+    std::cout<<"using brush "<<bi<<'\n';
+    result = mypaint_brush_from_string(brush, brushes[bi].c_str());
 
     /* Create a brush with default settings for all parameters, then set its color to red. */
     mypaint_brush_set_base_value(brush, MYPAINT_BRUSH_SETTING_COLOR_H, colour(gen));
