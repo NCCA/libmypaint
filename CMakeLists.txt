@@ -46,3 +46,29 @@ add_custom_target(
 add_dependencies(${TargetName} run)
 add_subdirectory(${CMAKE_SOURCE_DIR}/tests)
 add_subdirectory(${CMAKE_SOURCE_DIR}/examples)
+add_subdirectory(${CMAKE_SOURCE_DIR}/nccademos)
+
+# copy brushes to binary folder
+
+
+
+
+
+add_custom_command(
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_SOURCE_DIR}/brushes
+            ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/brushes
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT  ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/brushes/
+    COMMENT "copying brushes "
+    )
+# Now a custom target to copy the files which check to see if the files exist
+add_custom_target(
+    CopyBrushfiles ALL
+    DEPENDS ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/brushes/)
+# now add this a dependency for NGLTests so it gets run.
+add_dependencies(${TargetName} CopyBrushfiles )
+
+
+
