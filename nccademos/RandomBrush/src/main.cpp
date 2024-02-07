@@ -68,7 +68,6 @@ void move_to(MyPaintBrush *brush, MyPaintSurface *surf, float x, float y)
 }
 
 
-
 std::vector<guint16> iterate_over_surface(MyPaintTiledSurface * tiled_surface, int height, int width)
 {
     std::vector<guint16> data;
@@ -121,6 +120,22 @@ std::vector<guint16> iterate_over_surface(MyPaintTiledSurface * tiled_surface, i
     return data;
 }
 
+bool writeFile(std::string_view filename, MyPaintFixedTiledSurface *surface)
+{
+    // write_ppm(surface, filename);
+    using namespace OIIO;
+    std::unique_ptr<ImageOutput> out = ImageOutput::create (filename.data());
+    auto w=mypaint_fixed_tiled_surface_get_width(surface);
+    auto h= mypaint_fixed_tiled_surface_get_width(surface);
+    ImageSpec spec (w,h,4, TypeDesc::UINT16);
+    auto success=out->open(filename.data(),spec);
+    auto data=iterate_over_surface((MyPaintTiledSurface *)surface,w,h);
+    std::cout<<"data size is "<<data.size()<<'\n';
+    success=out->write_image(TypeDesc::UINT16, &data[0]);
+
+    success=out->close();
+    return success;
+}
 
 
 int main(int argc, char *argv[]) 
@@ -175,19 +190,8 @@ int main(int argc, char *argv[])
     std::cout<<"iteration "<<i<<'\n';
         mypaint_brush_unref(brush);
     char filename[100];
-    snprintf(filename, 100,"test/output_%d.png", i);
-    // write_ppm(surface, filename);
-    using namespace OIIO;
-  std::unique_ptr<ImageOutput> out = ImageOutput::create (filename);
-  
-  ImageSpec spec (w,h,4, TypeDesc::UINT16);
-  auto success=out->open(filename,spec);
-  auto data=iterate_over_surface((MyPaintTiledSurface *)surface,w,h);
-  std::cout<<"data size is "<<data.size()<<'\n';
-  success=out->write_image(TypeDesc::UINT16, &data[0]);
-
-  success=out->close();
-
+    snprintf(filename, 100,"test/output_%d.exr", i);
+    writeFile(filename,surface);
   }
     std::cout<<"done, cleaning up\n";
     rois.num_rectangles = 1;
