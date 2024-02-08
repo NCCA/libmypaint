@@ -3,7 +3,13 @@
     "name": "libmypaint",
     "version": "1.0",
     "dependencies": [
-      "json-c"
+      "json-c",
+      "glm",
+      "fmt",
+      "gl3w",
+      "freetype",
+      "rapidjson",
+      "rapidxml"
     ]
-  }
+}
   

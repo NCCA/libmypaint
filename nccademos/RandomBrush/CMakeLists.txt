@@ -15,10 +15,7 @@ find_package(OpenImageIO CONFIG REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_sources(RandomBrush PRIVATE 
-                            ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/src/writeppm.cpp
-                            ${CMAKE_CURRENT_SOURCE_DIR}/include/writeppm.h
-                            )
+                            ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 target_link_directories(RandomBrush PRIVATE ${CMAKE_BINARY_DIR})
 target_link_libraries(RandomBrush PRIVATE mypaint)
 target_link_libraries(RandomBrush PRIVATE OpenImageIO::OpenImageIO OpenImageIO::OpenImageIO_Util)

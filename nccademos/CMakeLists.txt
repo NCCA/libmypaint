@@ -6,4 +6,5 @@ endif()
 # Name of the project
 project(nccaexamplesBuildAll)
 add_subdirectory(RandomBrush)
+add_subdirectory(QtPaint)
 

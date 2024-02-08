@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include "writeppm.h"
-#include "mypaint-brush.h"  
+#include "mypaint-brush.h"
 #include "mypaint-fixed-tiled-surface.h"
 #include <vector>
 #include <filesystem>
@@ -162,7 +161,7 @@ int main(int argc, char *argv[])
 
     int result;
 
-    for(int i=0; i<2000 ; ++ i)
+    for(int i=0; i<200 ; ++ i)
     {
     int bi=rbrush(gen);
     MyPaintBrush *brush =    mypaint_brush_new();
@@ -189,10 +188,11 @@ int main(int argc, char *argv[])
     std::cout<<"end stroke\n";
     std::cout<<"iteration "<<i<<'\n';
         mypaint_brush_unref(brush);
-    char filename[100];
-    snprintf(filename, 100,"test/output_%d.exr", i);
-    writeFile(filename,surface);
+//    char filename[100];
+//    snprintf(filename, 100,"test/output_%d.png", i);
+//    writeFile(filename,surface);
   }
+    writeFile("output.png",surface);
     std::cout<<"done, cleaning up\n";
     rois.num_rectangles = 1;
     rois.rectangles = &roi;
