@@ -23,8 +23,15 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/ui)
 # run rcc if required
 set(CMAKE_AUTORCC ON)
 # find Qt we can use either Qt6 or Qt5
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets OpenGLWidgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGLWidgets)
+# find Qt libs first we check for Version 6
+find_package(Qt6 COMPONENTS OpenGL Widgets OpenGLWidgets QUIET )
+if ( Qt6_FOUND )
+	message("Found Qt6 Using that")
+else()
+	message("Found Qt5 Using that")
+	find_package(Qt5 COMPONENTS OpenGL Widgets REQUIRED)
+endif()
+
 find_package(OpenImageIO CONFIG REQUIRED)
 
 # use C++ 17
@@ -45,17 +52,17 @@ target_sources(${TargetName} PRIVATE ${PROJECT_SOURCE_DIR}/src/main.cpp
 
 )
 
-target_link_libraries(${TargetName} PRIVATE  NGL Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::OpenGLWidgets )
+target_link_libraries(${TargetName} PRIVATE  NGL Qt${QT_VERSION_MAJOR}::Widgets  )
+if (Qt6_FOUND)
+	target_link_libraries(${TargetName} PRIVATE   Qt::OpenGLWidgets)
+endif()
+
 target_link_libraries(${TargetName} PRIVATE mypaint)
 target_link_libraries(${TargetName} PRIVATE OpenImageIO::OpenImageIO OpenImageIO::OpenImageIO_Util)
 
 
-# add_custom_target(${TargetName}CopyShadersAndfonts ALL
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory
-#     ${CMAKE_CURRENT_SOURCE_DIR}/shaders
-#     $<TARGET_FILE_DIR:${TargetName}>/shaders
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory
-#     ${CMAKE_CURRENT_SOURCE_DIR}/fonts
-#     $<TARGET_FILE_DIR:${TargetName}>/fonts
-
-# ) 
+ add_custom_target(${TargetName}CopyShadersAndfonts ALL
+     COMMAND ${CMAKE_COMMAND} -E copy_directory
+     ${CMAKE_CURRENT_SOURCE_DIR}/shaders
+     $<TARGET_FILE_DIR:${TargetName}>/shaders
+ )

@@ -39,6 +39,9 @@ public :
     void brushIndexDown();
 
 private :
+    void clearBuffer();
+
+    void updateTextureBuffer();
 
 protected:
   //----------------------------------------------------------------------------------------------------------------------
@@ -78,6 +81,11 @@ private :
   /// @param _event the Qt Event structure
   void mouseReleaseEvent (QMouseEvent *_event ) override;
   void wheelEvent( QWheelEvent* _event ) override;
+  GLuint m_vao=0;
+  GLuint m_textureID;
+  bool m_animate=true;
+  std::unique_ptr<unsigned short []> m_buffer;
+  void timerEvent(QTimerEvent *) override;
 
 
 };

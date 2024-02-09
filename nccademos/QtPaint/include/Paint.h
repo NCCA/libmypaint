@@ -20,8 +20,9 @@ public :
     void writeImage(std::string_view _fname);
     void changeBrush(int index);
     void setRadius(float _r){m_brushRadius=_r;}
-private :
     std::vector<guint16> iterate_over_surface();
+
+private :
 
     std::vector<std::string> m_brushes;
     MyPaintBrush *m_brush;
