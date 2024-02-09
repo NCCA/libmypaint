@@ -12,3 +12,15 @@ MainWindow::~MainWindow()
 {
     delete m_ui;
 }
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+
+    switch(event->key())
+    {
+        case Qt::Key_S : m_gl->writeImage(); break;
+        case Qt::Key_2 : m_gl->brushIndexDown(); break;
+        case Qt::Key_1 : m_gl->brushIndexUp(); break;
+
+    }
+}

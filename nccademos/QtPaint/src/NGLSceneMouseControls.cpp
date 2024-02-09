@@ -1,6 +1,7 @@
 #include "NGLScene.h"
 #include <QMouseEvent>
 #include <QtGlobal>
+#include <iostream>
 //----------------------------------------------------------------------------------------------------------------------
 void NGLScene::mouseMoveEvent(QMouseEvent *_event)
 {
@@ -21,6 +22,8 @@ void NGLScene::mouseMoveEvent(QMouseEvent *_event)
     m_win.origX = position.x();
     m_win.origY = position.y();
     update();
+    m_paint->brushStroke(position.x(),position.y());
+    std::cout<<"move "<<position.x()<<' '<<position.y()<<'\n';
   }
   // right mouse translate code
   else if (m_win.translate && _event->buttons() == Qt::RightButton)
@@ -51,6 +54,9 @@ void NGLScene::mousePressEvent(QMouseEvent *_event)
     m_win.origX = position.x();
     m_win.origY = position.y();
     m_win.rotate = true;
+    m_paint->brushDown(position.x(),position.y());
+    std::cout<<"Down "<<position.x()<<' '<<position.y()<<'\n';
+
   }
   // right mouse translate mode
   else if (_event->button() == Qt::RightButton)
@@ -70,6 +76,8 @@ void NGLScene::mouseReleaseEvent(QMouseEvent *_event)
   if (_event->button() == Qt::LeftButton)
   {
     m_win.rotate = false;
+    m_paint->brushUp();
+    std::cout<<"up\n";
   }
   // right mouse translate mode
   if (_event->button() == Qt::RightButton)

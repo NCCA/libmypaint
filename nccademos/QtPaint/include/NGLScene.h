@@ -7,6 +7,7 @@
 #include <QResizeEvent>
 #include <QOpenGLWidget>
 #include <memory>
+#include "Paint.h"
 
 
 /// @file NGLScene.h
@@ -32,7 +33,10 @@ public :
 
 		/// @brief dtor
   ~NGLScene() override;
+  void writeImage();
  public slots :
+    void brushIndexUp();
+    void brushIndexDown();
 
 private :
 
@@ -55,6 +59,8 @@ protected:
 
   /// @brief our model position
   ngl::Vec3 m_modelPos;
+  std::unique_ptr<Paint> m_paint;
+  int m_brushIndex=0;
 
 private :
   /// @brief this method is called every time a mouse is moved

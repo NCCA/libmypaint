@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
 
     std::cout<<"end stroke\n";
     std::cout<<"iteration "<<i<<'\n';
-        mypaint_brush_unref(brush);
+    mypaint_brush_unref(brush);
 //    char filename[100];
 //    snprintf(filename, 100,"test/output_%d.png", i);
 //    writeFile(filename,surface);

@@ -11,6 +11,7 @@ NGLScene::NGLScene( QWidget *_parent ) : QOpenGLWidget( _parent )
   setFocus();
   // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
   resize(_parent->size());
+  m_paint = std::make_unique<Paint>(1024,720);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -45,3 +46,22 @@ NGLScene::~NGLScene()
 {
 }
 
+void NGLScene::writeImage()
+{
+    m_paint->writeImage("test.png");
+    
+}
+
+void NGLScene::brushIndexUp()
+{
+    m_brushIndex+=1;
+    std::cout<<"Changing brush up "<<m_brushIndex<<'\n';
+    m_paint->changeBrush(m_brushIndex);
+}
+void NGLScene::brushIndexDown()
+{
+    m_brushIndex-=1;
+    std::cout<<"Changing brush down "<<m_brushIndex<<'\n';
+    m_paint->changeBrush(m_brushIndex);
+
+}
